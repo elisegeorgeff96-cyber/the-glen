@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Glen — A Career Compass for the Exhausted and Brilliant</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0a0a0f;
+  --deep: #12101a;
+  --panel: #1a1726;
+  --panel2: #221e33;
+  --border: #3d3560;
+  --border2: #5a4f8a;
+  --text: #e8e0f8;
+  --muted: #8a7fb8;
+  --faint: #4a4470;
+  --green: #4ade80;
+  --green2: #22c55e;
+  --teal: #2dd4bf;
+  --purple: #a78bfa;
+  --pink: #f472b6;
+  --gold: #fbbf24;
+  --gold2: #f59e0b;
+  --amber: #fb923c;
+  --cyan: #67e8f9;
+  --white: #f8f4ff;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Press Start 2P', monospace;
+  background: var(--black);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, var(--purple) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 40%, var(--cyan) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 8%, var(--gold) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 55%, var(--pink) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 20%, var(--white) 0%, transparent 100%),
+    radial-gradient(1px 1px at 82% 70%, var(--purple) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 75%, var(--cyan) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 35%, var(--gold) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 88%, var(--white) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 92%, var(--pink) 0%, transparent 100%),
+    radial-gradient(2px 2px at 78% 5%, var(--white) 0%, transparent 100%),
+    radial-gradient(1px 1px at 5% 50%, var(--gold) 0%, transparent 100%),
+    radial-gradient(2px 2px at 48% 30%, var(--purple) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 95%, var(--white) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px);
+  pointer-events: none;
+  z-index: 999;
+}
+.sparkles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.sp {
+  position: absolute;
+  width: 4px; height: 4px;
+  background: var(--gold);
+  opacity: 0;
+  animation: sparkle-float linear infinite;
+}
+.sp.p { background: var(--purple); width: 2px; height: 2px; }
+.sp.c { background: var(--cyan); }
+.sp.k { background: var(--pink); width: 6px; height: 6px; }
+.sp.g { background: var(--green); width: 2px; height: 2px; }
+@keyframes sparkle-float {
+  0% { opacity: 0; transform: translateY(0) rotate(0deg); }
+  10% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { opacity: 0; transform: translateY(-110vh) rotate(720deg); }
+}
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: repeating-linear-gradient(90deg, var(--green) 0px, var(--green) 4px, var(--teal) 4px, var(--teal) 8px);
+  transition: width 0.4s steps(20); z-index: 100;
+}
+.screen {
+  display: none; min-height: 100vh;
+  padding: 3rem 1.5rem 5rem;
+  max-width: 740px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.screen.active { display: block; animation: pixelIn 0.25s steps(6) forwards; }
+@keyframes pixelIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.pixel-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.8rem, 2.2vw, 1.2rem);
+  color: var(--green);
+  line-height: 1.8; margin-bottom: 1rem;
+  text-shadow: 2px 2px 0 #052e16, 0 0 20px rgba(74,222,128,0.3);
+}
+.pixel-title .accent { color: var(--gold); text-shadow: 2px 2px 0 #451a03, 0 0 16px rgba(251,191,36,0.35); }
+.pixel-title .pink { color: var(--pink); text-shadow: 2px 2px 0 #500724; }
+.lore-box {
+  background: var(--panel);
+  border-left: 4px solid var(--purple);
+  padding: 1.25rem 1.5rem; margin: 1.5rem 0 2rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem; line-height: 2.2;
+  color: #c4b8e8;
+}
+.body-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem; line-height: 1.8;
+  color: var(--muted); margin-bottom: 1rem;
+}
+.step-marker { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; }
+.step-chip {
+  font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--faint); background: var(--panel);
+  border: 1px solid var(--border); padding: 4px 10px;
+}
+.step-icon { font-size: 1rem; animation: blink 1.2s steps(1) infinite; }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+.options { display: flex; flex-direction: column; gap: 0.6rem; margin: 1.5rem 0; }
+.option-card {
+  background: var(--panel); border: 2px solid var(--border);
+  padding: 1rem 1.25rem; cursor: pointer;
+  transition: border-color 0.1s, background 0.1s, transform 0.1s;
+  position: relative;
+}
+.option-card::before {
+  content: '▶'; position: absolute; left: -1rem; top: 50%;
+  transform: translateY(-50%); color: var(--green);
+  font-size: 0.6rem; opacity: 0; transition: opacity 0.1s;
+}
+.option-card:hover { border-color: var(--green); background: var(--panel2); transform: translateX(6px); }
+.option-card:hover::before { opacity: 1; }
+.option-card.selected {
+  border-color: var(--green); background: rgba(74,222,128,0.08);
+  transform: translateX(6px); box-shadow: 2px 2px 0 var(--green2);
+}
+.option-card.selected::before { opacity: 1; }
+.option-card.wildcard { background: rgba(167,139,250,0.06); border: 2px dashed var(--purple); }
+.option-card.wildcard:hover { background: rgba(167,139,250,0.12); border-color: var(--pink); box-shadow: 2px 2px 0 #7c3aed; }
+.option-card.wildcard.selected { background: rgba(167,139,250,0.14); border: 2px dashed var(--pink); box-shadow: 2px 2px 0 var(--purple); }
+.option-title { font-size: 0.58rem; color: var(--text); margin-bottom: 0.5rem; line-height: 1.7; }
+.option-card.wildcard .option-title { color: var(--purple); }
+.option-card.wildcard.selected .option-title { color: var(--pink); }
+.option-card.selected .option-title { color: var(--green); }
+.option-sub { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: var(--faint); line-height: 1.6; }
+.option-card.selected .option-sub { color: var(--muted); }
+.wild-tag {
+  display: inline-block; font-size: 0.45rem; letter-spacing: 0.1em;
+  color: var(--purple); background: rgba(167,139,250,0.12);
+  border: 1px solid var(--purple); padding: 2px 8px; margin-bottom: 0.5rem;
+}
+.trait-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 0.5rem; margin: 1.5rem 0; }
+.trait {
+  background: var(--panel); border: 2px solid var(--border);
+  padding: 0.7rem 0.9rem; cursor: pointer;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem; color: var(--muted); line-height: 1.5;
+  transition: all 0.1s;
+}
+.trait:hover { border-color: var(--teal); color: var(--text); }
+.trait.selected { border-color: var(--teal); background: rgba(45,212,191,0.1); color: var(--teal); box-shadow: 1px 1px 0 var(--teal); }
+.trait-status { font-size: 0.5rem; color: var(--amber); min-height: 1.5em; margin-top: 0.75rem; line-height: 1.8; }
+.trait-status.complete { color: var(--teal); }
+.btn-next {
+  display: inline-block; margin-top: 2rem; padding: 0.85rem 2.5rem;
+  background: var(--green); color: var(--black); border: none;
+  font-family: 'Press Start 2P', monospace; font-size: 0.55rem;
+  letter-spacing: 0.08em; cursor: pointer; transition: all 0.1s;
+  box-shadow: 4px 4px 0 var(--green2); text-transform: uppercase;
+}
+.btn-next:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--green2); }
+.btn-next:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--green2); }
+.btn-next:disabled { background: var(--panel2); color: var(--faint); box-shadow: 2px 2px 0 var(--border); cursor: not-allowed; transform: none; }
+.btn-ghost {
+  display: inline-block; margin-top: 1rem; margin-left: 1rem;
+  padding: 0.7rem 1.5rem; background: transparent; color: var(--muted);
+  border: 2px solid var(--border); font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem; letter-spacing: 0.08em; cursor: pointer;
+  transition: all 0.1s; box-shadow: 2px 2px 0 var(--border2);
+}
+.btn-ghost:hover { border-color: var(--purple); color: var(--purple); }
+.nudge { font-size: 0.45rem; color: var(--amber); min-height: 1.5em; margin-top: 0.4rem; line-height: 1.8; }
+.opening-sprite {
+  font-size: 2.5rem; margin-bottom: 1.5rem; display: block;
+  animation: sprite-bob 1.5s steps(2) infinite;
+  filter: drop-shadow(0 0 8px var(--purple));
+}
+@keyframes sprite-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.pixel-trees { display: flex; gap: 4px; margin: 1.5rem 0; opacity: 0.3; }
+.ptree { width: 8px; height: 16px; background: var(--green2); position: relative; }
+.ptree::before {
+  content: ''; position: absolute; bottom: 100%; left: -4px;
+  width: 16px; height: 16px; background: var(--green);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+.pixel-divider {
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--border) 0px, var(--border) 4px, transparent 4px, transparent 8px);
+  margin: 2rem 0;
+}
+.result-header { text-align: center; padding: 2rem 0 1.5rem; }
+.result-dir-label { font-size: 0.45rem; letter-spacing: 0.25em; color: var(--faint); text-transform: uppercase; margin-bottom: 0.5rem; }
+.result-heading {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(1rem, 3vw, 1.6rem); color: var(--gold);
+  text-shadow: 3px 3px 0 #451a03, 0 0 24px rgba(251,191,36,0.5);
+  line-height: 1.5; margin-bottom: 1rem;
+}
+.result-badge {
+  display: inline-block; font-size: 0.45rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--black); background: var(--gold);
+  padding: 5px 16px; box-shadow: 2px 2px 0 #92400e; margin-bottom: 2rem;
+}
+.result-body {
+  background: var(--panel); border: 2px solid var(--border);
+  padding: 1.75rem; margin-bottom: 1rem; box-shadow: 4px 4px 0 var(--border2);
+}
+.result-body p {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.05rem;
+  line-height: 1.85; color: var(--text); margin-bottom: 1.2rem;
+}
+.result-body p:last-child { margin-bottom: 0; }
+.result-flavor {
+  font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+  font-style: italic; color: var(--purple); text-align: center; margin-top: 1.5rem;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--deep); }
+::-webkit-scrollbar-thumb { background: var(--border2); }
+</style>
+</head>
+<body>
+<div id="progress-bar" style="width:0%"></div>
+<div class="sparkles" id="sc"></div>
+<button id="mute-btn" onclick="toggleMute()" style="position:fixed;bottom:1rem;right:1rem;z-index:200;font-family:'Press Start 2P',monospace;font-size:0.45rem;padding:6px 10px;background:var(--panel);color:var(--muted);border:1px solid var(--border);cursor:pointer;letter-spacing:0.08em;">♪ ON</button>
+
+<!-- S0 OPENING -->
+<div id="s0" class="screen active">
+  <span class="opening-sprite">✦</span>
+  <div class="pixel-title">YOU STEPPED<br>OFF THE DOCK.</div>
+  <div class="pixel-title" style="margin-top:0.5rem;"><span class="accent">THE SEA</span> WAS<br>NOT KIND.</div>
+  <div class="lore-box">
+    You gave years to work that asked everything of you — work that was genuinely important, and genuinely hard. You gave until there was nothing left, and then you gave some more.<br><br>
+    Now you are standing at a tree line. Behind you: the work. In front of you: a forest you do not recognize. And in the dark between the branches, something speaks — not loudly, and not with answers. Just a single instruction:<br><br>
+    Follow the voice to the glen. We will figure out the rest from there.
+  </div>
+  <div class="pixel-trees">
+    <div class="ptree"></div><div class="ptree"></div><div class="ptree"></div><div class="ptree"></div><div class="ptree"></div><div class="ptree"></div><div class="ptree"></div><div class="ptree"></div>
+  </div>
+  <p class="body-text">This compass is for the exhausted and brilliant. There are no wrong paths. Some options are practical, some are strange, and the ones marked <span style="color:var(--purple)">✦ wildcard</span> are for when your imagination deserves room to run further than your caution allows.</p>
+  <br>
+  <button class="btn-next" onclick="go(1)">▶ ENTER THE FOREST</button>
+</div>
+
+<!-- S1 FEELING -->
+<div id="s1" class="screen">
+  <div class="step-marker"><span class="step-icon" style="color:var(--green)">▶</span><span class="step-chip">The Glen — First Question</span></div>
+  <div class="pixel-title">THE VOICE ASKS:<br><span class="accent">"WHAT BROUGHT YOU<br>TO THE TREE LINE?"</span></div>
+  <div class="lore-box">Before the compass can point anywhere, it needs to know where you're coming from. Not what you achieved — how it actually <em>feels</em> right now, standing in the dark.</div>
+  <div class="options" id="o-feeling"></div>
+  <p class="nudge" id="n-feeling"></p>
+  <button class="btn-next" id="b1" disabled onclick="go(2)">▶ THIS ONE</button>
+</div>
+
+<!-- S2 LEADERSHIP -->
+<div id="s2" class="screen">
+  <div class="step-marker"><span class="step-icon" style="color:var(--pink)">★</span><span class="step-chip">The Shadow Question</span></div>
+  <div class="pixel-title">SOMETHING WAS<br><span class="pink">DONE TO YOU.</span></div>
+  <div class="lore-box">Not everything that drained you was the work itself. Sometimes the environment was impossible, but it was a specific person who broke something. The forest wants to know if you are carrying that too.</div>
+  <div class="options" id="o-leadership"></div>
+  <p class="nudge" id="n-leadership"></p>
+  <button class="btn-next" id="b2" disabled onclick="go(3)">▶ YES. THAT.</button>
+</div>
+
+<!-- S3 TRAITS -->
+<div id="s3" class="screen">
+  <div class="step-marker"><span class="step-icon" style="color:var(--teal)">◆</span><span class="step-chip">What you carried through it</span></div>
+  <div class="pixel-title">BEFORE WE GO<br>ANY FURTHER —</div>
+  <div class="lore-box">Every single one of the following things is true about you. Select each one to claim it. You cannot continue until you do — not as a trick, but because the glen does not let anyone pass who hasn't acknowledged what they're worth.<br><br><em>Some of them may feel untrue. Claim them anyway. They have been waiting.</em></div>
+  <div class="trait-grid" id="trait-grid"></div>
+  <p class="trait-status" id="trait-status">Select each one to claim it.</p>
+  <button class="btn-next" id="b3" disabled onclick="go(4)">▶ I CLAIM ALL OF THESE</button>
+</div>
+
+<!-- S4 WORK -->
+<div id="s4" class="screen">
+  <div class="step-marker"><span class="step-icon" style="color:var(--gold)">◈</span><span class="step-chip">The Work Itself</span></div>
+  <div class="pixel-title">WHAT DOES GOOD WORK<br><span class="accent">FEEL LIKE IN YOUR BODY?</span></div>
+  <div class="lore-box">Not what you're good at — you already know that. What kind of work leaves you feeling like yourself at the end of a day?</div>
+  <div class="options" id="o-work"></div>
+  <p class="nudge" id="n-work"></p>
+  <button class="btn-next" id="b4" disabled onclick="go(5)">▶ THAT ONE</button>
+</div>
+
+<!-- S5 PEOPLE -->
+<div id="s5" class="screen">
+  <div class="step-marker"><span class="step-icon" style="color:var(--cyan)">○</span><span class="step-chip">Other Humans</span></div>
+  <div class="pixel-title">HOW MUCH OF YOU DO<br><span class="accent">OTHER PEOPLE GET?</span></div>
+  <div class="lore-box">You have spent years managing relationships across organizations, cultures, and people who did not always make it easy. Now — genuinely — how much of your energy do you want to give to other people in the next chapter?</div>
+  <div class="options" id="o-people"></div>
+  <p class="nudge" id="n-people"></p>
+  <button class="btn-next" id="b5" disabled onclick="go(6)">▶ THAT'S RIGHT</button>
+</div>
+
+<!-- S6 LEARNING -->
+<div id="s6" class="screen">
+  <div class="step-marker"><span class="step-icon" style="color:var(--purple)">✳</span><span class="step-chip">The Scholar's Question</span></div>
+  <div class="pixel-title">YOU ALREADY HAVE<br><span class="accent">A VERY LARGE BRAIN.</span></div>
+  <p class="body-text" style="font-family:'Press Start 2P',monospace;font-size:0.55rem;line-height:2.2;color:#c4b8e8;">You have a graduate degree — maybe more than one. You have spent years being the person who had done the reading. What calls you forward from here?</p>
+  <div class="options" id="o-learning"></div>
+  <p class="nudge" id="n-learning"></p>
+  <button class="btn-next" id="b6" disabled onclick="go(7)">▶ YES</button>
+</div>
+
+<!-- S7 WANT -->
+<div id="s7" class="screen">
+  <div class="step-marker"><span class="step-icon" style="color:var(--green)">♦</span><span class="step-chip">The Relief Question</span></div>
+  <div class="pixel-title">WHAT SOUNDS LIKE<br><span class="accent">BREATHING AGAIN?</span></div>
+  <div class="lore-box">Not what sounds impressive. Not what makes sense on paper. What makes you exhale?</div>
+  <div class="options" id="o-want"></div>
+  <p class="nudge" id="n-want"></p>
+  <button class="btn-next" id="b7" disabled onclick="go(8)">▶ THAT</button>
+</div>
+
+<!-- S8 WILDCARD -->
+<div id="s8" class="screen">
+  <div class="step-marker"><span class="step-icon" style="color:var(--purple)">✦</span><span class="step-chip">The Glen's Gift</span></div>
+  <div class="pixel-title">THE GLEN SETS OUT<br><span class="pink">EIGHT OBJECTS.</span><br>WHICH DO YOU TAKE?</div>
+  <div class="lore-box">You don't have to know what it's for. You don't have to explain your choice. Pick the one that your hand reaches for first — or the one that makes the least rational sense. The glen has been watching. It already knows something you don't.</div>
+  <div class="options" id="o-wild"></div>
+  <p class="nudge" id="n-wild"></p>
+  <button class="btn-next" id="b8" disabled onclick="showResult()">▶ LET THE COMPASS SETTLE</button>
+</div>
+
+<!-- RESULT -->
+<div id="s-result" class="screen">
+
+  <!-- pixel forest path art -->
+  <div id="forest-path" style="text-align:center;margin-bottom:2rem;position:relative;">
+    <canvas id="path-canvas" width="600" height="220" style="max-width:100%;display:block;margin:0 auto;image-rendering:pixelated;"></canvas>
+  </div>
+
+  <div style="text-align:center;margin-bottom:1.5rem;">
+    <div style="font-size:0.45rem;letter-spacing:0.3em;color:var(--faint);text-transform:uppercase;margin-bottom:0.75rem;">THE GLEN HAS LISTENED</div>
+    <div class="pixel-title" style="font-size:clamp(0.7rem,2vw,1rem);color:var(--purple);text-shadow:2px 2px 0 #2e1065;">THE VOICE SAYS:</div>
+    <div class="pixel-title" style="font-size:clamp(0.7rem,2vw,1rem);margin-bottom:0.5rem;">YOUR PATH LEADS</div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:clamp(1.2rem,4vw,2.2rem);color:var(--gold);text-shadow:3px 3px 0 #451a03,0 0 32px rgba(251,191,36,0.6);line-height:1.4;margin-bottom:1rem;" id="r-dir-label">—</div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:clamp(0.8rem,2.5vw,1.3rem);color:var(--green);text-shadow:2px 2px 0 #052e16,0 0 20px rgba(74,222,128,0.4);line-height:1.6;margin-bottom:1.25rem;" id="r-heading"></div>
+    <div style="display:inline-block;font-family:'Press Start 2P',monospace;font-size:0.45rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:6px 18px;box-shadow:3px 3px 0 #92400e;margin-bottom:2rem;" id="r-badge"></div>
+  </div>
+
+  <div style="background:var(--panel);border:2px solid var(--border);padding:1.75rem;margin-bottom:1rem;box-shadow:4px 4px 0 var(--border2);">
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.85;color:var(--text);margin-bottom:1.2rem;" id="r-body1"></p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.85;color:var(--text);margin-bottom:1.2rem;" id="r-body2"></p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.85;color:var(--text);" id="r-body3"></p>
+  </div>
+
+  <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:var(--purple);text-align:center;margin:1.5rem 0;" id="r-flavor"></div>
+
+  <div style="height:2px;background:repeating-linear-gradient(90deg,var(--border) 0px,var(--border) 4px,transparent 4px,transparent 8px);margin:2rem 0;"></div>
+
+  <p style="font-family:'Press Start 2P',monospace;font-size:0.45rem;line-height:2.2;color:var(--faint);text-align:center;">THE TRAITS YOU CLAIMED TRAVEL WITH YOU.<br>THE GLEN REMEMBERS.</p>
+  <br>
+  <div style="text-align:center">
+    <button class="btn-next" onclick="restart()">▶ WALK BACK TO THE DOCK</button>
+    <button class="btn-ghost" onclick="copyResult()">COPY YOUR DIRECTION</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const sc = document.getElementById('sc');
+  const types = ['','p','c','k','g'];
+  for(let i=0;i<35;i++){
+    const s=document.createElement('div');
+    s.className='sp '+types[i%types.length];
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*100+'%';
+    s.style.animationDuration=(7+Math.random()*14)+'s';
+    s.style.animationDelay=(Math.random()*14)+'s';
+    sc.appendChild(s);
+  }
+})();
+
+// ── CHIPTUNE AUDIO ENGINE ──────────────────────────────────────────────
+let audioCtx=null, musicNodes=[], musicPlaying=false;
+
+function initAudio(){
+  if(audioCtx) return;
+  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  startMusic();
+}
+
+function noteFreq(note,octave){ 
+  const n={'C':0,'D':2,'E':4,'F':5,'G':7,'A':9,'B':11};
+  return 440*Math.pow(2,(n[note]+(octave-4)*12-9)/12);
+}
+
+// Moon-theme-inspired: gentle arpeggiated melody loop with triangle + pulse waves
+function makeOsc(freq,type,gain,start,dur,ctx,dest){
+  const o=ctx.createOscillator();
+  const g=ctx.createGain();
+  o.type=type; o.frequency.value=freq;
+  g.gain.setValueAtTime(0,start);
+  g.gain.linearRampToValueAtTime(gain,start+0.02);
+  g.gain.setValueAtTime(gain,start+dur-0.05);
+  g.gain.linearRampToValueAtTime(0,start+dur);
+  o.connect(g); g.connect(dest);
+  o.start(start); o.stop(start+dur);
+  return o;
+}
+
+function startMusic(){
+  if(!audioCtx||musicPlaying) return;
+  musicPlaying=true;
+  const master=audioCtx.createGain();
+  master.gain.value=0.13;
+  const rev=audioCtx.createConvolver();
+  // simple impulse reverb
+  const len=audioCtx.sampleRate*1.2;
+  const buf=audioCtx.createBuffer(2,len,audioCtx.sampleRate);
+  for(let c=0;c<2;c++){const d=buf.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);}
+  rev.buffer=buf;
+  const revGain=audioCtx.createGain(); revGain.gain.value=0.25;
+  master.connect(audioCtx.destination);
+  master.connect(rev); rev.connect(revGain); revGain.connect(audioCtx.destination);
+
+  // Melody: moon-like arpeggios (Am pentatonic feel: A C D E G)
+  const melody=[
+    ['A',4],['C',5],['E',5],['G',5],['A',5],['G',5],['E',5],['C',5],
+    ['A',4],['E',5],['A',5],['G',5],['E',5],['D',5],['C',5],['A',4],
+    ['C',5],['E',5],['G',5],['A',5],['C',6],['A',5],['G',5],['E',5],
+    ['D',5],['E',5],['G',5],['A',5],['G',5],['E',5],['D',5],['C',5],
+  ];
+  // Bass: root notes
+  const bass=[
+    ['A',2],['A',2],['C',3],['C',3],['E',3],['E',3],['G',2],['G',2],
+    ['A',2],['A',2],['D',3],['D',3],['E',3],['E',3],['C',3],['C',3],
+    ['A',2],['A',2],['C',3],['C',3],['E',3],['E',3],['A',2],['A',2],
+    ['D',3],['D',3],['G',2],['G',2],['E',3],['E',3],['A',2],['A',2],
+  ];
+  const bpm=88, beat=60/bpm, loopLen=melody.length*beat*0.5;
+
+  function scheduleLoop(offset){
+    melody.forEach(([n,o],i)=>{
+      const t=audioCtx.currentTime+offset+i*beat*0.5;
+      makeOsc(noteFreq(n,o),'triangle',0.4,t,beat*0.45,audioCtx,master);
+    });
+    bass.forEach(([n,o],i)=>{
+      const t=audioCtx.currentTime+offset+i*beat*0.5;
+      makeOsc(noteFreq(n,o),'square',0.15,t,beat*0.9,audioCtx,master);
+    });
+  }
+
+  let loopCount=0;
+  function loop(){
+    scheduleLoop(0);
+    loopCount++;
+    // schedule next loop slightly before end to avoid gap
+    const tid=setTimeout(loop, loopLen*1000-200);
+    musicNodes.push(tid);
+  }
+  loop();
+}
+
+// start audio on first interaction
+document.addEventListener('click',()=>initAudio(),{once:true});
+document.addEventListener('keydown',()=>initAudio(),{once:true});
+
+// ── FOREST PATH CANVAS ─────────────────────────────────────────────────
+function drawForestPath(direction){
+  const canvas=document.getElementById('path-canvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=600,H=220;
+  ctx.clearRect(0,0,W,H);
+  
+  // pixel size
+  const P=4;
+  function px(x,y,w,h,col){ ctx.fillStyle=col; ctx.fillRect(x*P,y*P,w*P,h*P); }
+
+  // sky
+  for(let x=0;x<W/P;x++) for(let y=0;y<H/P;y++) px(x,y,1,1,'#0a0a0f');
+  
+  // stars
+  const stars=[[3,2],[8,1],[15,3],[22,1],[30,2],[38,1],[45,3],[52,2],[60,1],[67,2],[75,1],[82,3],[90,2],[97,1],[105,3],[112,2],[118,1],[125,2],[132,3],[140,1],[147,2]];
+  stars.forEach(([x,y])=>px(x,y,1,1,Math.random()>0.5?'#a78bfa':'#fbbf24'));
+
+  // ground
+  for(let x=0;x<W/P;x++) px(x,45,1,10,'#1a1726');
+  for(let x=0;x<W/P;x++) px(x,44,1,1,'#3d3560');
+
+  // pixel trees left
+  [[2,28],[5,25],[10,30],[14,26],[20,29]].forEach(([x,base])=>{
+    px(x,base,3,H/P-base,'#12101a'); // trunk shadow
+    px(x,base+1,3,3,'#22c55e');
+    px(x-1,base-2,5,4,'#4ade80');
+    px(x-2,base-5,7,5,'#22c55e');
+    px(x-1,base-7,5,4,'#4ade80');
+  });
+  // pixel trees right
+  [[125,27],[130,30],[135,26],[140,29],[144,31]].forEach(([x,base])=>{
+    px(x,base+1,3,3,'#22c55e');
+    px(x-1,base-2,5,4,'#4ade80');
+    px(x-2,base-5,7,5,'#22c55e');
+    px(x-1,base-7,5,4,'#4ade80');
+  });
+
+  // path
+  const pathColor='#2dd4bf', pathDark='#1a1726';
+  // winding path depends on direction
+  const dirs={
+    'NORTH':[[72,44],[71,40],[70,35],[70,30],[70,24],[71,18],[72,12],[72,6]],
+    'SOUTH':[[72,44],[73,40],[74,35],[75,30],[75,24],[74,18],[73,12],[72,6]],
+    'EAST':[[72,44],[76,42],[82,40],[88,38],[94,37],[100,36],[108,35],[116,34]],
+    'WEST':[[72,44],[68,42],[62,40],[56,38],[50,37],[44,36],[36,35],[28,34]],
+    'THE FIFTH DIRECTION':[[72,44],[71,42],[70,38],[70,33],[71,27],[72,22],[71,16],[72,10]],
+  };
+  const path=dirs[direction]||dirs['NORTH'];
+  path.forEach(([x,y],i)=>{
+    const w=i===0?5:3;
+    px(x-1,y,w,2,i%2===0?pathColor:'#1d9e75');
+  });
+
+  // figure (player sprite)
+  const [fx,fy]=path[Math.floor(path.length/2)];
+  px(fx,fy-4,2,2,'#f8f4ff'); // head
+  px(fx-1,fy-2,4,3,'#a78bfa'); // body
+  px(fx,fy+1,1,2,'#4a4470'); // legs
+  px(fx+1,fy+1,1,2,'#4a4470');
+
+  // glow at path end
+  const [ex,ey]=path[path.length-1];
+  ctx.save();
+  const grd=ctx.createRadialGradient(ex*P,ey*P,2,ex*P,ey*P,28);
+  grd.addColorStop(0,'rgba(251,191,36,0.7)');
+  grd.addColorStop(1,'rgba(251,191,36,0)');
+  ctx.fillStyle=grd;
+  ctx.fillRect((ex-8)*P,(ey-8)*P,16*P,16*P);
+  ctx.restore();
+  px(ex,ey-1,2,2,'#fbbf24');
+}
+
+// multi-select: each key holds a Set of selected indices
+let state={feeling:new Set(),leadership:new Set(),work:new Set(),people:new Set(),learning:new Set(),want:new Set(),wild:new Set()};
+const TOTAL=9;
+const MAX_SELECT=2;
+
+const feelings=[
+  {t:"I feel erased",s:"I gave years of real work and real care. I'm not sure anyone noticed, or will remember."},
+  {t:"I feel like I ran out of self",s:"I gave until there was nothing left. I don't know who I am when I'm not fighting for something."},
+  {t:"I feel like a cynic in a believer's clothing",s:"Something in me still cares. But it's buried deep under too many disappointments."},
+  {t:"I feel furious in a way I can't fully explain",s:"Not just tired. Angry. At what was asked of me and what was never given back."},
+  {t:"I feel grief",s:"I loved this work once. Losing that love is its own kind of loss that nobody warned me about."},
+  {t:"I feel like a compass with no north",s:"I used to know exactly what I was moving toward. That clarity is gone.",wildcard:true},
+];
+
+const leadership=[
+  {t:"I was led by someone who needed me to be smaller to feel big",s:"My competence unsettled them. My ideas disappeared quietly. My confidence was chipped away on purpose."},
+  {t:"I experienced circular damage — someone passing on what was done to them",s:"They had survived something hard at the top and called the cycle mentorship. It wasn't."},
+  {t:"Leadership that promised more and delivered less — repeatedly",s:"Not malicious. Just spineless. The vision kept shifting, the goalposts kept moving, and I kept being told to trust the process."},
+  {t:"The institution itself was the problem — no single villain",s:"Good people, impossible constraints, a culture that ground everyone down equally and called it normal."},
+  {t:"I was simply not valued the way my work deserved",s:"No dramatic story. Just quiet, sustained underestimation over time. That does its own damage."},
+  {t:"Honestly, I did some of this to myself",s:"The environment was hard, but I also wouldn't let myself stop. Perfectionism. Overcommitment. The need to prove something."},
+  {t:"All of the above, and something I don't have words for yet",s:"The forest doesn't need you to name it today.",wildcard:true},
+];
+
+const traits=[
+  "I spoke my mind even when my voice shook",
+  "I know when to leave — and I chose this",
+  "I have survived being underestimated by people with less ability than me",
+  "My care for the world is real, even if it has been exploited",
+  "I can navigate systems that were not designed with me in mind",
+  "I am more resilient than I have ever been given credit for",
+  "I have held complexity that would have broken people with less range",
+  "I did not compromise my integrity to keep a job",
+  "I built things with almost nothing, and they worked",
+  "My mind is genuinely extraordinary — I have just been in environments that made me forget",
+  "I showed up for people who did not always show up for me",
+  "I am allowed to want more than what this work gave me",
+  "The self-doubt I carry is scar tissue from hard places — not evidence of my limits",
+  "I deserve to be paid what my expertise is actually worth",
+  "I am not starting from zero. I am starting from hard-won experience.",
+];
+
+const work=[
+  {t:"Strategy and big picture — to see the whole system",s:"The forest rewards those who can read the shape of the canopy, not just the root at their feet. Not execution — architecture."},
+  {t:"Building relationships and moving people toward something true",s:"The persuasion that comes from genuine belief. The room that shifts because you found the right words at the right moment."},
+  {t:"Deep focus — to disappear into a problem and return with something",s:"Fewer torches, longer tunnels. The kind of work that asks you to go in alone and trust that something will be there when you arrive."},
+  {t:"Making — expression, craft, things that did not exist before",s:"Something in you has been quiet for a long time. It made itself small so the urgent work could be done. It is still there, waiting."},
+  {t:"Tending systems — keeping the necessary things running",s:"The infrastructure that lets everything else breathe. The one who notices what is fraying before it breaks. That work is not small."},
+  {t:"Teaching — passing the hard-won knowledge forward",s:"What you know, most people do not. The forest grows because seeds travel. This is how you become the seed."},
+  {t:"I know what I don't want more than what I do",s:"The glen accepts this. Name the shape of the empty space. That is also an answer.",wildcard:true},
+];
+
+const people=[
+  {t:"Mostly alone for a while — to recover what was taken",s:"The glen is quiet. There is no shame in needing the quiet. Just you and the work, until the interior world refills."},
+  {t:"A small circle, chosen carefully",s:"Not a whole institution's worth of obligation. A few people who tell the truth. That is enough. That is, in fact, a great deal."},
+  {t:"Outward-facing — new rooms, new trust to build",s:"The threshold is where you come alive. The stranger who becomes an ally. The door that opens because you were the one who knocked."},
+  {t:"Chosen work, chosen people — freelance, contract, on your own terms",s:"Not permanent allegiance to a single flag. The right to say: I will bring what I have, for this long, and then I will go."},
+  {t:"People who are simply well — not broken by the same water",s:"You are not against people. You are against what repeated harm does to a room. Give you the undamaged ones and watch what happens."},
+  {t:"To build something with people, and eventually lead it",s:"You have seen it done badly enough to know what it looks like done well. That knowledge does not leave. It waits."},
+  {t:"One person, a good window, and a creature who asks nothing of you",s:"The forest does not judge this answer. Neither does the glen.",wildcard:true},
+];
+
+const learning=[
+  {t:"Deeper into what I already know — to become unreachable at it",s:"Not a new door. A deeper room in the same house. The kind of mastery that makes you the last name on the list because there is no other name."},
+  {t:"A practical skill — something new I can hold and use",s:"A tool that opens a door. Not theory. Not another credential. Something that works in your hands within months."},
+  {t:"A creative skill — to make rather than only analyze",s:"The part of the mind that draws, writes, builds, shapes. It has been waiting at the edge of the forest. It is allowed to come in now."},
+  {t:"Something completely sideways — to see what my mind does",s:"Unfamiliar territory is how you learn the real shape of your intelligence. Go somewhere that doesn't know your name yet."},
+  {t:"By doing — put me in it and let me find my way",s:"You have read enough maps. You want to walk the terrain. The learning that sticks is the learning that leaves a mark."},
+  {t:"Nothing, for a while — to simply be capable without being tested",s:"Rest is not the absence of growth. The forest goes dormant so it can rise again. The glen respects this season."},
+  {t:"Something so particular and strange it becomes a kind of magic",s:"The intersection of three things no one thought to combine. The knowledge that makes you genuinely hard to explain at a table.",wildcard:true},
+];
+
+const wants=[
+  {t:"Quieter work — less urgency, more sustainability",s:"The forest has no deadlines. You have been running toward fires for long enough. Something that hums rather than screams."},
+  {t:"Autonomy — to move through the work in my own way",s:"Not to be unseen. Just to be trusted. The ability to choose the path, even when someone else chose the destination."},
+  {t:"Work where my values are already the ground beneath it",s:"Not a mission you have to argue for. A place where it is simply the air, and you can breathe without explaining why."},
+  {t:"To be paid what the work is actually worth",s:"You have bartered yourself for cause long enough. The glen does not think money and meaning are opposites."},
+  {t:"To use what I know in rooms where it lands",s:"To be heard. To close the thing. To watch the idea move from your mouth into the world and become real."},
+  {t:"Something that belongs to me — my name on the foundation",s:"Not as decoration on someone else's structure. The foundation itself. The thing that would not exist without you."},
+  {t:"To be held inside something larger — an existing body, a real infrastructure",s:"You have built from nothing long enough. To arrive somewhere that already stands and simply add your weight to it — that is its own kind of relief."},
+  {t:"For making things to be the work itself — not the reward after",s:"Not a side channel. Not a weekend exhale. The craft at the center of the hours. Creation as the job description."},
+  {t:"To be so absorbed that you forget you were ever tired",s:"Not escape. Immersion. The kind of work that pulls by its own gravity, that you follow rather than push.",wildcard:true},
+];
+
+const wildcards=[
+  {t:"A candle",s:"Steady light in an unfamiliar place. You don't need to see far — just one step at a time, in the right direction.",wildcard:true},
+  {t:"A map with one location marked",s:"You don't know what the place is yet. But when you arrive, you'll recognize it.",wildcard:true},
+  {t:"A key that fits a door you haven't found yet",s:"It belongs to something real. You'll know it when you hold it up to the right lock.",wildcard:true},
+  {t:"A compass that only points toward what you actually want",s:"Not what you should want. Not what makes sense on paper. What the body already knows.",wildcard:true},
+  {t:"A blank contract with your signature already on it",s:"The other party hasn't been decided. The terms are whatever you write. Pick up the pen.",wildcard:true},
+  {t:"A door handle with no door attached",s:"The opening goes somewhere. You have to decide where first.",wildcard:true},
+  {t:"A very small boat",s:"It only fits one person. It goes where you row it. The current is favorable but light.",wildcard:true},
+  {t:"A stone with your name already carved into it",s:"Not a gravestone. A cornerstone. Whatever you build next rests on this.",wildcard:true},
+];
+
+const results=[
+  {
+    dir:"NORTH", heading:"The Long Game", badge:"Institutional Depth — Quiet Power",
+    b1:"You are not starting over. You are translating. The knowledge you have built, the relationships you have earned, the ability to navigate complex organizations and difficult stakeholders — all of it transfers. The compass points toward places that need someone who already understands the terrain.",
+    b2:"Mission-driven organizations. Policy bodies. Places with real resources and the genuine intention to use them. Institutions that need a practitioner in the room, not another theorist. These places are not looking for someone to train. They are looking for exactly what you already are.",
+    b3:"The adjustment you will need to make: letting go of urgency as an identity. The pace will be different. That is not a failure. That is, in fact, the point.",
+    flavor:"The compass points toward deep roots, not loud ones. That is still the forest."
+  },
+  {
+    dir:"EAST", heading:"The Revenue Door", badge:"Sales, Partnerships, Client-Facing Work",
+    b1:"Here is something no one told you when you were grinding through the work: the ability to explain a genuinely complicated thing to someone who needs to understand it — with warmth, with conviction, without losing them — is one of the most commercially valuable skills that exists.",
+    b2:"Technical sales. Business development. Partnerships. Account work at an organization whose mission you can get behind. You do not just know the material. You know who needs to hear it and why it matters to them. That combination is rare and it pays well.",
+    b3:"This path usually begins with one role that feels like a translation, and then becomes obvious in retrospect. The surprise is that it uses exactly what you are already good at — relationship, credibility, and the ability to walk into a new room and be taken seriously within minutes.",
+    flavor:"The east door does not look like what you imagined. Open it anyway."
+  },
+  {
+    dir:"SOUTH", heading:"The Return to Ground", badge:"Independent Work — Your Name on the Foundation",
+    b1:"You have been building other people's visions long enough. There is a version of the next chapter where the thing you build belongs to you — a consulting practice, a freelance offering, a body of creative work, something that has your fingerprints as the foundation and not just the decoration.",
+    b2:"The early stage is quiet. That is not a warning — it is a description. It will feel slow. It will feel uncertain. You will miss having an institution to belong to, and then one day you will stop missing it. What you make when nobody is telling you what to make is often the most honest thing you have ever produced.",
+    b3:"You have the credentials, the network, and the knowledge. You have also been through enough to know exactly what you will and will not accept. That combination is the beginning of something real.",
+    flavor:"The compass points toward the root system, not the canopy. Both are still the tree."
+  },
+  {
+    dir:"WEST", heading:"The Crossing", badge:"Pivot, Private Sector, or Full Reinvention",
+    b1:"Your skills are more portable than you have been allowing yourself to believe. You know how to navigate institutions, move across cultures, hold rooms that disagree with each other, and build trust with people who have every reason to be skeptical. Those things do not belong to one sector.",
+    b2:"The door you haven't opened yet is not necessarily the dramatic one — sometimes it's just the one that pays fairly and asks you to use what you know in a new context. Organizations with resources and genuine commitments to change need people who understand complexity. That's you.",
+    b3:"Or: what if the move is not to something bigger, but to something newer — a place where the work has not calcified yet, where there is still room to shape what it becomes?",
+    flavor:"The compass points toward new coordinates. You have navigated unfamiliar water before."
+  },
+  {
+    dir:"THE FIFTH DIRECTION", heading:"The Small Door", badge:"Mission-Driven, Smaller, Values-First",
+    b1:"There is a direction the compass doesn't always name out loud, because it looks counterintuitive from the outside: smaller. Slower. A place that cannot pay you everything the market would, but also cannot ask you to leave your values at the door.",
+    b2:"A small organization doing something real. A role where you are not a cog in a large machine but a person whose presence is felt — where you help run the thing, tend the systems, carry the mission forward with your hands and your judgment and your care.",
+    b3:"The paycut is real. So is the relief. You have already done the math on what it costs to work somewhere that hollows you out. This direction knows you can do that math, and it thinks you already know the answer.",
+    flavor:"The smallest doors sometimes open into the largest rooms."
+  },
+];
+
+function buildOptions(cid,items,skey,bid,nid){
+  const c=document.getElementById(cid);
+  c.innerHTML='';
+  const lbl=document.createElement('p');
+  lbl.style.cssText='font-size:0.45rem;color:var(--faint);margin-bottom:0.75rem;line-height:1.8;';
+  lbl.textContent='SELECT UP TO TWO';
+  c.appendChild(lbl);
+  const cards=[];
+  items.forEach((item,i)=>{
+    const d=document.createElement('div');
+    d.className='option-card'+(item.wildcard?' wildcard':'');
+    d.dataset.idx=i;
+    let html='';
+    if(item.wildcard) html+='<div class="wild-tag">✦ WILDCARD</div>';
+    html+='<div class="option-title">'+item.t+'</div>';
+    html+='<div class="option-sub">'+item.s+'</div>';
+    d.innerHTML=html;
+    cards.push(d);
+    d.onclick=()=>{
+      const sel=state[skey];
+      if(sel.has(i)){
+        sel.delete(i);
+        d.classList.remove('selected');
+      } else {
+        if(sel.size>=MAX_SELECT){
+          const first=sel.values().next().value;
+          sel.delete(first);
+          cards.forEach(el=>{ if(Number(el.dataset.idx)===first) el.classList.remove('selected'); });
+        }
+        sel.add(i);
+        d.classList.add('selected');
+      }
+      document.getElementById(bid).disabled=(sel.size===0);
+      document.getElementById(nid).textContent=sel.size===2?'TWO SELECTED — OR CONTINUE WITH ONE':'';
+    };
+    c.appendChild(d);
+  });
+}
+
+function setupTraits(){
+  const grid=document.getElementById('trait-grid');
+  grid.innerHTML='';
+  const sel=new Set();
+  const total=traits.length;
+  traits.forEach((t,i)=>{
+    const el=document.createElement('div');
+    el.className='trait';
+    el.textContent=t;
+    el.onclick=()=>{
+      if(sel.has(i)){sel.delete(i);el.classList.remove('selected');}
+      else{sel.add(i);el.classList.add('selected');}
+      const s=document.getElementById('trait-status');
+      const b=document.getElementById('b3');
+      if(sel.size===total){
+        s.textContent='YES. EVERY SINGLE ONE. You earned these. Now keep walking.';
+        s.className='trait-status complete';
+        b.disabled=false;
+      } else if(sel.size>=total-2){
+        s.textContent='Almost — '+(total-sel.size)+' more to claim.';
+        s.className='trait-status';
+      } else {
+        s.textContent=sel.size+' of '+total+' claimed — keep going.';
+        s.className='trait-status';
+      }
+    };
+    grid.appendChild(el);
+  });
+}
+
+const screenMap=[
+  null,
+  ()=>buildOptions('o-feeling',feelings,'feeling','b1','n-feeling'),
+  ()=>buildOptions('o-leadership',leadership,'leadership','b2','n-leadership'),
+  setupTraits,
+  ()=>buildOptions('o-work',work,'work','b4','n-work'),
+  ()=>buildOptions('o-people',people,'people','b5','n-people'),
+  ()=>buildOptions('o-learning',learning,'learning','b6','n-learning'),
+  ()=>buildOptions('o-want',wants,'want','b7','n-want'),
+  ()=>buildOptions('o-wild',wildcards,'wild','b8','n-wild'),
+];
+
+function go(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  window.scrollTo(0,0);
+  if(screenMap[n]) screenMap[n]();
+  document.getElementById('progress-bar').style.width=Math.round((n/TOTAL)*100)+'%';
+}
+
+function showResult(){
+  const w=state.want, p=state.people, wk=state.work;
+  let ri;
+  // fifth direction: plug into something larger (6) OR quiet+values combo OR systems/tending work
+  if(w.has(6)||(w.has(0)&&w.has(2))||wk.has(4)){ ri=4; }
+  // east: expertise landing/clients (4), outward-facing people (2), relationship work (1)
+  else if(w.has(4)||p.has(2)||wk.has(1)){ ri=1; }
+  // south: build own thing (5), freelance/chosen (3), autonomy (1), creative-as-work (7)
+  else if(w.has(5)||p.has(3)||w.has(1)||w.has(7)){ ri=2; }
+  // west: wildcard selected, or creative making work (3)
+  else if(state.wild.size>0||wk.has(3)){ ri=3; }
+  // north: default
+  else { ri=0; }
+  const r=results[ri];
+  document.getElementById('r-dir-label').textContent=r.dir;
+  document.getElementById('r-heading').textContent=r.heading;
+  document.getElementById('r-badge').textContent=r.badge;
+  document.getElementById('r-body1').textContent=r.b1;
+  document.getElementById('r-body2').textContent=r.b2;
+  document.getElementById('r-body3').textContent=r.b3;
+  document.getElementById('r-flavor').textContent=r.flavor;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-result').classList.add('active');
+  document.getElementById('progress-bar').style.width='100%';
+  window.scrollTo(0,0);
+  // draw the path after DOM is visible
+  requestAnimationFrame(()=>drawForestPath(r.dir));
+}
+
+function restart(){
+  state={feeling:new Set(),leadership:new Set(),work:new Set(),people:new Set(),learning:new Set(),want:new Set(),wild:new Set()};
+  go(0);
+}
+
+function toggleMute(){
+  if(!audioCtx) initAudio();
+  const btn=document.getElementById('mute-btn');
+  if(audioCtx.state==='suspended'){ audioCtx.resume(); btn.textContent='♪ ON'; }
+  else { audioCtx.suspend(); btn.textContent='♪ OFF'; }
+}
+
+function copyResult(){
+  const h=document.getElementById('r-heading').textContent;
+  const b=document.getElementById('r-badge').textContent;
+  const b1=document.getElementById('r-body1').textContent;
+  const b2=document.getElementById('r-body2').textContent;
+  navigator.clipboard.writeText('Direction: '+h+'\n'+b+'\n\n'+b1+'\n\n'+b2).catch(()=>{});
+  alert('Copied to clipboard.');
+}
+</script>
+</body>
+</html>
